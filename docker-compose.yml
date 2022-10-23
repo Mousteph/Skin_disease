@@ -5,4 +5,4 @@ services:
     container_name: server-mlbio-project
     ports:
       - "127.0.0.1:8089:8089"
-    command: python server.py 
+    command: python src/server.py 

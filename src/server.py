@@ -22,7 +22,7 @@ LESION_TYPE = {
 }
 
 model = MLBioNN(len(LESION_TYPE))
-model.load_state_dict(torch.load("model_mlbio_cpu.pth"))
+model.load_state_dict(torch.load("/code/model/model_mlbio_cpu.pth"))
 
 transform = transforms.Compose([
             transforms.ToTensor(), # Scale image to [0, 1]
