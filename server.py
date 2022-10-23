@@ -1,5 +1,6 @@
 from flask import Flask, request, abort
 from neural_network import MLBioNN
+from explain import ExplainResults
 import base64
 import json
 import io
@@ -27,14 +28,7 @@ transform = transforms.Compose([
             transforms.ToTensor(), # Scale image to [0, 1]
         ])
 
-def do_prediction(img):
-    img = transform(img)
-
-    with torch.no_grad():
-        pred = model(img.unsqueeze(0))
-        pred = pred.argmax(1).item()
-
-    return LESION_TYPE.get(pred)
+explain_model = ExplainResults(model, transform, LESION_TYPE)
 
 @app.route("/predict", methods=['POST'])
 def predict():
@@ -44,8 +38,16 @@ def predict():
     img = request.json['image']
     img_bytes = base64.b64decode(img.encode('utf-8'))
     img = Image.open(io.BytesIO(img_bytes))
+    
+    should_explain = request.json['explain']
+    lesion, mask = explain_model.prediction(img, should_explain)
 
-    return json.dumps({"prediction": do_prediction(img)})
+    if mask is not None:
+        mask =  mask.tolist() 
+
+    return json.dumps({"prediction": lesion[0],
+                       "probability": float(lesion[1]),
+                       "image": mask})
 
 
 if __name__ == "__main__":

@@ -1,6 +1,6 @@
 FROM python:3.10
 
-RUN pip install flask numpy torch torchvision torchaudio
+RUN pip install flask numpy torch torchvision torchaudio lime
 
 WORKDIR /code
-COPY server.py model_mlbio_cpu.pth model_mlbio.pth neural_network.py .
+COPY server.py model_mlbio_cpu.pth model_mlbio.pth neural_network.py explain.py .
