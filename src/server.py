@@ -23,7 +23,7 @@ LESION_TYPE = {
 PRECISION = {
     "Faible": 5,
     "Moyenne": 10,
-    "Forte": 20,
+    "Importante": 20,
 }
 
 model = MLBioNN(len(LESION_TYPE))

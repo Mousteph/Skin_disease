@@ -1,6 +1,7 @@
 import streamlit as st
 import base64
-from sender import send_image 
+from sender import send_image
+import numpy as np
 
 st.set_page_config(
     layout="wide",
@@ -26,12 +27,15 @@ st.write("##")
 if st.button("Prediction") and image is not None:
     with st.spinner('Prediction in progress...'):
         img = base64.b64encode(image.read()).decode("utf8")
-        success, explain = send_image(img, "http://127.0.0.1:8089/predict", should_explain)
+        data = send_image(img, "http://127.0.0.1:8089/predict", should_explain, type_explain)
         
-        if success:
-            skin_diseases = explain[0]
-            proba_skin_diseases = explain[1]
-            image_pred = explain[2]
+        if data.get("success", False):
+            skin_diseases = data.get("prediction")
+            proba_skin_diseases = data.get("probability")
+            image_pred = np.array(data.get("image")) if should_explain else None
+        else:
+            st.error("Une erreur est survenue lors de la prédiction.")
+
 
 st1, st2 = st.columns(2)
                 
