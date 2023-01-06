@@ -25,7 +25,7 @@ class ExplainResults:
 
             return proba.numpy()
         
-    def prediction(self, image, explain=False, num_samples=1000):
+    def prediction(self, image, explain=False, num_samples=10):
         probs = self.batch_prediction([image])
         val = probs.argmax()
         lesion = (self.lesion_type.get(val), probs[0][val])
