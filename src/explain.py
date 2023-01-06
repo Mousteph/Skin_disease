@@ -25,7 +25,7 @@ class ExplainResults:
 
             return proba.numpy()
         
-    def prediction(self, image, explain=False):
+    def prediction(self, image, explain=False, num_samples=1000):
         probs = self.batch_prediction([image])
         val = probs.argmax()
         lesion = (self.lesion_type.get(val), probs[0][val])
@@ -35,8 +35,13 @@ class ExplainResults:
                                                           self.batch_prediction, # classification function
                                                           top_labels=1,
                                                           hide_color=0,
-                                                          num_samples=100) # number of images that will be sent to classification function
-            temp, mask = explanation.get_image_and_mask(explanation.top_labels[0], positive_only=True, num_features=5, hide_rest=False)
+                                                          num_samples=num_samples) # number of images that will be sent to classification function
+
+            temp, mask = explanation.get_image_and_mask(explanation.top_labels[0],
+                                                        positive_only=True,
+                                                        num_features=5,
+                                                        hide_rest=False)
+
             return lesion, mark_boundaries(temp/255.0, mask)
         
         return lesion, None

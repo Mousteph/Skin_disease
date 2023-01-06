@@ -26,6 +26,7 @@ model.load_state_dict(torch.load("/code/model/model_mlbio_cpu.pth"))
 
 transform = transforms.Compose([
             transforms.ToTensor(), # Scale image to [0, 1]
+            transforms.Resize((450, 600)),
         ])
 
 explain_model = ExplainResults(model, transform, LESION_TYPE)
