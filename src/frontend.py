@@ -40,10 +40,10 @@ if st.button("Prediction") and image is not None:
 st1, st2 = st.columns(2)
                 
 if image is not None:
-    st1.image(image, caption=f"Image : {image.name}", use_column_width=True)
+    st1.image(image, caption=f"Image : {image.name}")
     
 if image_pred is not None:
-    st2.image(image_pred, caption=f"Image : {skin_diseases}", use_column_width=True)
+    st2.image(image_pred, caption=f"Image : {skin_diseases}")
 
 if image is not None and skin_diseases is not None and proba_skin_diseases is not None:
     if not should_explain:

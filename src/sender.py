@@ -1,6 +1,5 @@
 import requests
 import json
-import numpy as np
 
 headers = {'Content-type': 'application/json', 'Accept': 'text/plain'}
 
@@ -25,16 +24,3 @@ def send_image(img: str, url: str, explain: bool, precision: str = "Moyenne") ->
         return response.json()
     except requests.exceptions.RequestException as e:
         return {"success": False, "error": str(e)}
-
-    try:
-        data = response.json()
-        explain = data.get('image')
-        
-        prediction = data.get('prediction')
-        probability = data.get('probability')
-        explain = np.array(explain) if explain is not None else None
-        
-        return True, (prediction, probability, explain)
-
-    except requests.exceptions.RequestException:
-        False, response.text

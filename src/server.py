@@ -55,7 +55,7 @@ def prediction():
     except Exception as e:
         return return_error("Invalid image: " + str(e))
 
-    should_explain = request.json['explain']
+    should_explain = request.json['explain'] if 'explain' in request.json else False
     if type(should_explain) is not bool:
         return return_error("Invalid type for explain: Should be a boolean")
         
