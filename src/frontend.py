@@ -14,8 +14,14 @@ image_pred = None
 
 should_explain = st.checkbox("Explication", value=False)
 
+type_explain = st.selectbox("Précision de l'explication (une précision importante augmente le temps d'éxecution).",
+                            ["Faible", "Moyenne", "Importante"],
+                            index=2)
+                            
 skin_diseases = None
 proba_skin_diseases = None
+
+st.write("##")
 
 if st.button("Prediction") and image is not None:
     with st.spinner('Prediction in progress...'):
@@ -33,9 +39,9 @@ if image is not None:
     st1.image(image, caption=f"Image : {image.name}", use_column_width=True)
     
 if image_pred is not None:
-    st2.image(image_pred, caption="Image : explication", use_column_width=True)
+    st2.image(image_pred, caption=f"Image : {skin_diseases}", use_column_width=True)
 
-if  image is not None and skin_diseases is not None and proba_skin_diseases is not None:
+if image is not None and skin_diseases is not None and proba_skin_diseases is not None:
     if not should_explain:
         st.write(f"""
         ### Rapport de classification :

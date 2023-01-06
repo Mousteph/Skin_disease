@@ -1,4 +1,4 @@
-from flask import Flask, request, abort
+from flask import Flask, request
 from neural_network import MLBioNN
 from explain import ExplainResults
 import base64
@@ -6,7 +6,6 @@ import json
 import io
 import torch
 from torchvision import transforms
-import numpy as np
 from PIL import Image
 
 app = Flask(__name__)
@@ -21,6 +20,12 @@ LESION_TYPE = {
     6: 'Dermatofibroma'
 }
 
+PRECISION = {
+    "Faible": 5,
+    "Moyenne": 10,
+    "Forte": 20,
+}
+
 model = MLBioNN(len(LESION_TYPE))
 model.load_state_dict(torch.load("/code/model/model_mlbio_cpu.pth"))
 
@@ -31,25 +36,44 @@ transform = transforms.Compose([
 
 explain_model = ExplainResults(model, transform, LESION_TYPE)
 
+def return_error(error: str):
+    return json.dumps({
+        "success": False,
+        "error": error
+    })
+
 @app.route("/predict", methods=['POST'])
-def predict():
+def prediction():
     if not request.json or 'image' not in request.json:
-        abort(400)
+        return return_error("Missing image")
+        
+    try:
+        img = request.json['image']
+        img_bytes = base64.b64decode(img.encode('utf-8'))
+        img = Image.open(io.BytesIO(img_bytes))
+        
+    except Exception as e:
+        return return_error("Invalid image: " + str(e))
 
-    img = request.json['image']
-    img_bytes = base64.b64decode(img.encode('utf-8'))
-    img = Image.open(io.BytesIO(img_bytes))
-    
     should_explain = request.json['explain']
-    lesion, mask = explain_model.prediction(img, should_explain)
-
-    if mask is not None:
-        mask =  mask.tolist() 
-
-    return json.dumps({"prediction": lesion[0],
-                       "probability": float(lesion[1]),
-                       "image": mask})
-
-
+    if type(should_explain) is not bool:
+        return return_error("Invalid type for explain: Should be a boolean")
+        
+    precision = request.json['precision'] if 'precision' in request.json else "Moyenne"
+    precision = PRECISION.get(precision, 10)
+    
+    try:
+        lesion, mask = explain_model.prediction(img, should_explain, precision)
+        mask = mask.tolist() if mask is not None else None
+    except Exception as e:
+        return return_error("Invalid image: " + str(e))
+        
+    return json.dumps({
+        "success": True,
+        "prediction": lesion[0],
+        "probability": float(lesion[1]),
+        "image": mask
+    })    
+    
 if __name__ == "__main__":
     app.run("0.0.0.0", port=8089)
