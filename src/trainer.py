@@ -1,7 +1,28 @@
 import torch
 from typing import Tuple
 import tqdm
-from matplotlib import pyplot as plt
+
+class SaveBestModel:
+    def __init__(self, path: str, best_loss: float = float('inf')) -> None:
+        """Initialize the best model saver.
+        Args:
+            path (str): Path to save the model.
+            best_loss (float, optional): Best loss. Defaults to float('inf').
+        """
+        
+        self.path = path
+        self.best_loss = best_loss
+        
+    def __call__(self, model: torch.nn.Module, loss: float) -> None:
+        """Save the model if the loss is lower than the best loss.
+        Args:
+            model (torch.nn.Module): Model to save.
+            loss (float): Loss of the model.
+        """
+
+        if loss < self.best_loss:
+            self.best_loss = loss
+            torch.save(model.state_dict(), self.path)
 
 class Trainer:
     def __init__(self,
@@ -78,6 +99,8 @@ class Trainer:
                          train_loader: torch.utils.data.DataLoader,
                          test_loader: torch.utils.data.DataLoader,
                          epochs: int = 10,
+                         keep_best: bool = False,
+                         path_best_model: str = "best_model.pth",
                          plot_tdqm=False) -> Tuple[list, list, list, list]:
         """Train the model for a given number of epochs.
         
@@ -85,6 +108,8 @@ class Trainer:
             train_loader (torch.utils.data.DataLoader): Dataloader for the training set.
             test_loader (torch.utils.data.DataLoader): Dataloader for the test set.
             epochs (int, optional): Number of epochs. Defaults to 10.
+            keep_best (bool, optional): Keep the best model. Defaults to False.
+            path_best_model (str, optional): Path to save the best model. Defaults to "best_model.pth".
             plot_tdqm (bool, optional): Plot the training process with tqdm. Defaults to False.
             
         Returns:
@@ -104,6 +129,8 @@ class Trainer:
             
             return train_loss, train_accuracy, test_loss, test_accuracy
         
+        save_model = SaveBestModel(path_best_model)
+        
         if plot_tdqm:
             with tqdm.tqdm(range(epochs), desc="Epoch") as t:
                 for e in t:
@@ -113,6 +140,9 @@ class Trainer:
                     train_accuracies[e] = train_accuracy
                     test_losses[e] = test_loss
                     test_accuracies[e] = test_accuracy
+                    
+                    if keep_best:
+                        save_model(self.model, test_loss)
                     
                     t.set_postfix(train_loss=train_loss,
                                 train_accuracy=train_accuracy,
@@ -127,9 +157,15 @@ class Trainer:
                 train_accuracies[e] = train_accuracy
                 test_losses[e] = test_loss
                 test_accuracies[e] = test_accuracy
+                    
+                if keep_best:
+                    save_model(self.model, test_loss)
                 
                 print(f"Epoch {e + 1}/{epochs}, Train loss: {train_loss:.4f}, "
                       f"Train accuracy: {train_accuracy:.4f}, Test loss: {test_loss:.4f}, "
                       f"Test accuracy: {test_accuracy:.4f}")
+                
+        if keep_best:
+            model = model.load_state_dict(torch.load(path_best_model)).to(self.device)
 
         return train_losses, train_accuracies, test_losses, test_accuracies
