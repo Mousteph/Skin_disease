@@ -71,7 +71,7 @@ class Trainer:
             path (str): Path to save the model.
         """
         
-        torch.save(self.model.state_dict(), path)
+        torch.save(self.model.to('cpu').state_dict(), path)
         print(f"Model saved to {path}.")
    
     def training_process(self,

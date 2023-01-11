@@ -3,6 +3,7 @@ import sys
 import matplotlib.pyplot as plt
 import numpy as np
 from src.sender import send_image
+import argparse
 
 headers = {'Content-type': 'application/json', 'Accept': 'text/plain'}
 url = "http://127.0.0.1:8089/predict"
@@ -34,8 +35,6 @@ def get_prediction(img, url, explain, precision):
             plt.show()
 
 if __name__ == '__main__':
-    import argparse
-
     parser = argparse.ArgumentParser()
     parser.add_argument("--explain", action="store_true", help="If the server should explain the prediction")
     parser.add_argument("--precision", default="Moyenne", help="Precision of the explanation (Faible, Moyenne, Importante)")

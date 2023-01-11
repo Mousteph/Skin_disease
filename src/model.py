@@ -1,7 +1,7 @@
 import torchvision.models as models
 from torch import nn
 
-def get_HAM10000_model(output_dim: int) -> nn.Module:
+def HAM10000_model(output_dim: int) -> nn.Module:
     """Return a model for the HAM10000 dataset.
 
     Args:
