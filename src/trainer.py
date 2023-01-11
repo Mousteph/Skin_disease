@@ -120,7 +120,7 @@ class Trainer:
                                 test_accuracy=test_accuracy)
                     
         else:
-            for e in range(1, epochs + 1):
+            for e in range(epochs):
                 train_loss, train_accuracy, test_loss, test_accuracy = one_epoch(train_loader, test_loader)
                 
                 train_losses[e] = train_loss
@@ -128,7 +128,7 @@ class Trainer:
                 test_losses[e] = test_loss
                 test_accuracies[e] = test_accuracy
                 
-                print(f"Epoch {e}/{epochs}, Train loss: {train_loss:.4f}, "
+                print(f"Epoch {e + 1}/{epochs}, Train loss: {train_loss:.4f}, "
                       f"Train accuracy: {train_accuracy:.4f}, Test loss: {test_loss:.4f}, "
                       f"Test accuracy: {test_accuracy:.4f}")
 
