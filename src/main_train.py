@@ -1,6 +1,6 @@
 import argparse
 
-from datasetHAM10000 import DatasetHAM10000
+from datasetHAM10000 import HAM10000
 from model import HAM10000_model
 from trainer import Trainer
 
@@ -27,8 +27,8 @@ if __name__ == '__main__':
     parser.add_argument("root", nargs=1, help='Root to the images')
     args = parser.parse_args()
     
-    dataset_train = DatasetHAM10000(args.root[0], train=True, transform=train_transform)
-    dataset_test = DatasetHAM10000(args.root[0], train=False, transform=test_transform)
+    dataset_train = HAM10000.load_from_file(args.root[0], train=True, transform=train_transform)
+    dataset_test = HAM10000.load_from_file(args.root[0], train=False, transform=test_transform)
     
     batch_size = 64
     

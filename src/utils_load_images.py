@@ -14,7 +14,7 @@ def get_images(path: str) -> list:
     
     return [f for f in listdir(path) if isfile(join(path, f))]
 
-def get_metadata(dataset: pd.DataFrame, images: list[str]) -> pd.DataFrame:
+def get_metadata(dataset: pd.DataFrame, images: list) -> pd.DataFrame:
     """Return the metadata of the images.
 
     Args:
