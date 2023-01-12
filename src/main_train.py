@@ -25,8 +25,12 @@ test_transform = transforms.Compose(
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
     parser.add_argument("root", nargs=1, help='Root to the images')
+    parser.add_argument("--epochs", type=int, default=15,
+                        help="Number of epochs to train the model. Default: 15")
+    parser.add_argument("--modelname", type=str, default="model_mlbio.pth",
+                        help="Name of the model to save. Default: model_mlbio.pth")
     args = parser.parse_args()
-    
+   
     dataset_train = HAM10000.load_from_file(args.root[0], train=True, transform=train_transform)
     dataset_test = HAM10000.load_from_file(args.root[0], train=False, transform=test_transform)
     
@@ -41,9 +45,7 @@ if __name__ == '__main__':
     loss_function = nn.CrossEntropyLoss()
     optimizer = torch.optim.Adam(model.parameters())
     
-    epochs = 15
-    
     trainer = Trainer(model, optimizer, loss_function, device)
-    trainer.training_process(train_data, test_data, epochs)
+    trainer.training_process(train_data, test_data, args.epochs)
     
-    trainer.save("model.pth")
+    trainer.save(args.modelname)

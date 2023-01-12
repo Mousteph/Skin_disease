@@ -1,6 +1,5 @@
 import torch
 from typing import Tuple
-import tqdm
 
 class SaveBestModel:
     def __init__(self, path: str, best_loss: float = float('inf')) -> None:
@@ -100,8 +99,8 @@ class Trainer:
                          test_loader: torch.utils.data.DataLoader,
                          epochs: int = 10,
                          keep_best: bool = False,
-                         path_best_model: str = "best_model.pth",
-                         plot_tdqm=False) -> Tuple[list, list, list, list]:
+                         path_best_model: str = "./temp/best_model.pth"
+                         ) -> Tuple[list, list, list, list]:
         """Train the model for a given number of epochs.
         
         Args:
@@ -110,7 +109,6 @@ class Trainer:
             epochs (int, optional): Number of epochs. Defaults to 10.
             keep_best (bool, optional): Keep the best model. Defaults to False.
             path_best_model (str, optional): Path to save the best model. Defaults to "best_model.pth".
-            plot_tdqm (bool, optional): Plot the training process with tqdm. Defaults to False.
             
         Returns:
             Tuple[list, list, list, list]: Train loss, train accuracy, test loss, test accuracy.
@@ -121,51 +119,27 @@ class Trainer:
         test_losses = [0] * epochs
         test_accuracies = [0] * epochs
         
-        def one_epoch(train_loader: torch.utils.data.DataLoader,
-                      test_loader: torch.utils.data.DataLoader):
+        save_model = SaveBestModel(path_best_model)
+        
+        for e in range(epochs):
             self._train(train_loader)
             train_loss, train_accuracy = self._test(train_loader)
             test_loss, test_accuracy = self._test(test_loader)
             
-            return train_loss, train_accuracy, test_loss, test_accuracy
-        
-        save_model = SaveBestModel(path_best_model)
-        
-        if plot_tdqm:
-            with tqdm.tqdm(range(epochs), desc="Epoch") as t:
-                for e in t:
-                    train_loss, train_accuracy, test_loss, test_accuracy = one_epoch(train_loader, test_loader)
-                    
-                    train_losses[e] = train_loss
-                    train_accuracies[e] = train_accuracy
-                    test_losses[e] = test_loss
-                    test_accuracies[e] = test_accuracy
-                    
-                    if keep_best:
-                        save_model(self.model, test_loss)
-                    
-                    t.set_postfix(train_loss=train_loss,
-                                train_accuracy=train_accuracy,
-                                test_loss=test_loss,
-                                test_accuracy=test_accuracy)
-                    
-        else:
-            for e in range(epochs):
-                train_loss, train_accuracy, test_loss, test_accuracy = one_epoch(train_loader, test_loader)
+            train_losses[e] = train_loss
+            train_accuracies[e] = train_accuracy
+            test_losses[e] = test_loss
+            test_accuracies[e] = test_accuracy
                 
-                train_losses[e] = train_loss
-                train_accuracies[e] = train_accuracy
-                test_losses[e] = test_loss
-                test_accuracies[e] = test_accuracy
-                    
-                if keep_best:
-                    save_model(self.model, test_loss)
-                
-                print(f"Epoch {e + 1}/{epochs}, Train loss: {train_loss:.4f}, "
-                      f"Train accuracy: {train_accuracy:.4f}, Test loss: {test_loss:.4f}, "
-                      f"Test accuracy: {test_accuracy:.4f}")
+            if keep_best:
+                save_model(self.model, test_loss)
+            
+            print(f"Epoch {e + 1}/{epochs}, Train loss: {train_loss:.4f}, "
+                    f"Train accuracy: {train_accuracy:.4f}, Test loss: {test_loss:.4f}, "
+                    f"Test accuracy: {test_accuracy:.4f}")
                 
         if keep_best:
-            model = model.load_state_dict(torch.load(path_best_model)).to(self.device)
+            self.model.load_state_dict(torch.load(path_best_model))
+            self.model = self.model.to(self.device)
 
         return train_losses, train_accuracies, test_losses, test_accuracies
