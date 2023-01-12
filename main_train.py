@@ -4,6 +4,7 @@ from src import HAM10000, HAM10000_model, Trainer
 
 from torchvision import transforms
 from torch.utils.data import DataLoader
+from torch.optim import lr_scheduler
 import torch
 from torch import nn
 
@@ -11,7 +12,6 @@ train_transform = transforms.Compose(
     [
         transforms.RandomPerspective(),
         transforms.RandomRotation(180),
-        transforms.GaussianBlur(kernel_size=(5, 5)),
         transforms.ToTensor(), # Scale image to [0, 1]
     ])
 
@@ -47,8 +47,10 @@ if __name__ == '__main__':
         optimizer = torch.optim.Adam(model.fc.parameters())
     else:
         optimizer = torch.optim.Adam(model.parameters())
+        
+    lr_scheduler = lr_scheduler.StepLR(optimizer, step_size=5, gamma=0.1)
     
-    trainer = Trainer(model, optimizer, loss_function, device)
-    trainer.training_process(train_data, test_data, args.epochs)
+    trainer = Trainer(model, optimizer, loss_function, device, scheduler=lr_scheduler)
+    trainer.train(train_data, test_data, args.epochs)
     
     trainer.save(args.modelname)

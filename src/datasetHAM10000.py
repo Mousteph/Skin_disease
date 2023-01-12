@@ -7,7 +7,7 @@ from os.path import isfile, join
 from os import listdir
 
 def load_images(path_meta: str, path_images:str , type_dict: dict, cardinal_dict: dict) -> pd.DataFrame:
-    """Load the images.
+    """Load the HAM10000 images.
 
     Args:
         path_meta (str): Path to the metadata.
@@ -68,6 +68,19 @@ class HAM10000(Dataset):
     
     @staticmethod
     def load_from_file(root: str, train: bool = True, transform: Compose = None) -> Dataset:
+        """Load the HAM10000 images from a path.
+
+        Args:
+            root (str): Path to the HAM10000 dataset.
+            train (bool, optional): Get the training sample. Defaults to True.
+            transform (Compose, optional): Transformation to apply. Defaults to None.
+
+        Raises:
+            FileNotFoundError: If the file are not found.
+
+        Returns:
+            Dataset: The HAM10000 dataset.
+        """
         path_images = "/HAM10000_images_train/" if train else "/HAM10000_images_test/"
         path_metadata = "/HAM10000_metadata.csv"
         
