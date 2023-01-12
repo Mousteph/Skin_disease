@@ -3,7 +3,7 @@ import torch
 from PIL import Image
 import pandas as pd
 from torchvision.transforms import Compose
-from utils_load_images import load_images
+from .utils_load_images import load_images
 
 
 class HAM10000(Dataset):

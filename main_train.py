@@ -1,8 +1,8 @@
 import argparse
 
-from datasetHAM10000 import HAM10000
-from model import HAM10000_model
-from trainer import Trainer
+from src.datasetHAM10000 import HAM10000
+from src.model import HAM10000_model
+from src.trainer import Trainer
 
 from torchvision import transforms
 from torch.utils.data import DataLoader
@@ -27,8 +27,8 @@ if __name__ == '__main__':
     parser.add_argument("root", nargs=1, help='Root to the images')
     parser.add_argument("--epochs", type=int, default=15,
                         help="Number of epochs to train the model. Default: 15")
-    parser.add_argument("--modelname", type=str, default="model_mlbio.pth",
-                        help="Name of the model to save. Default: model_mlbio.pth")
+    parser.add_argument("--modelname", type=str, default="model/model_mlbio.pth",
+                        help="Name of the model to save. Default: model/model_mlbio.pth")
     args = parser.parse_args()
    
     dataset_train = HAM10000.load_from_file(args.root[0], train=True, transform=train_transform)

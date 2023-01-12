@@ -1,5 +1,5 @@
 from flask import Flask, request
-from neural_network import MLBioNN
+from model import HAM10000_model
 from explain import ExplainResults
 import base64
 import json
@@ -26,8 +26,8 @@ PRECISION = {
     "Importante": 20,
 }
 
-model = MLBioNN(len(LESION_TYPE))
-model.load_state_dict(torch.load("/code/model/model_mlbio_cpu.pth"))
+model = HAM10000_model(len(LESION_TYPE))
+model.load_state_dict(torch.load("/code/model/model_mlbio.pth"))
 
 transform = transforms.Compose([
             transforms.ToTensor(), # Scale image to [0, 1]
