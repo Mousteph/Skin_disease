@@ -2,9 +2,15 @@
 
 Bienvenue dans le projet de classification des maladies de la peau ! Le but de ce projet est de classifier différentes maladies de la peau en utilisant le jeu de données HAM10000 et de fournir une explication sur la décision prise par le modèle en utilisant la bibliothèque LIME.
 
+### Examples de classification
+
+<img src="images/mn_1.png" style="float:left; width:49%; margin-right:1%;">
+<img src="images/frontend.png" style="float:left; width:49%;">  
+
+
 ### Training data et performance du modèle
 
-Pour atteindre cet objectif, nous avons entraîné notre modèle en utilisant le jeu de données HAM10000 avec 2122 exemples d'entraînement et 519 exemples de validation. Nous avons réentraîné le modèle ResNet34 sur 15 époques et conservé le modèle le plus performant. Nous avons obtenu une précision de 80% sur les donées d'entraînement et de 70% sur les donées de test.
+Pour atteindre cet objectif, nous avons entraîné notre modèle en utilisant le jeu de données HAM10000 avec 2122 exemples d'entraînement et 519 exemples de validation. Nous avons réentraîné le modèle ResNet34 sur 15 époques (duré d'entrainememt ~1h15) et conservé le modèle le plus performant. Nous avons obtenu une précision de 80% sur les donées d'entraînement et de 70% sur les donées de test.
 
 Un modèle pré-entraîné est déjà disponible (et utilisé pour la classification), mais vous pouvez réentraîner le modèle en utilisant la commande suivante :
 
@@ -109,6 +115,12 @@ En cas d'échec, le serveur renvoie un objet JSON au format suivant :
   "error": "error_message"
 }
 ```
+
+### Informations
+- Le temps d'éxecution d'une image avec une precision :
+  - Faible : ~15s
+  - Moyenne : ~1min
+  - Importante : ~5min
 
 ## Crédits
 

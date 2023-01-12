@@ -2,25 +2,25 @@ import torch
 from typing import Tuple
 
 class SaveBestModel:
-    def __init__(self, path: str, best_loss: float = float('inf')) -> None:
+    def __init__(self, path: str, best_accuracy: float = 0) -> None:
         """Initialize the best model saver.
         Args:
             path (str): Path to save the model.
-            best_loss (float, optional): Best loss. Defaults to float('inf').
+            best_accuracy (float, optional): Best accuracy. Defaults to 0.
         """
         
         self.path = path
-        self.best_loss = best_loss
+        self.best_accuracy = best_accuracy
         
-    def __call__(self, model: torch.nn.Module, loss: float) -> None:
+    def __call__(self, model: torch.nn.Module, accuracy: float) -> None:
         """Save the model if the loss is lower than the best loss.
         Args:
             model (torch.nn.Module): Model to save.
-            loss (float): Loss of the model.
+            accuracy (float): Accuracy of the model.
         """
 
-        if loss < self.best_loss:
-            self.best_loss = loss
+        if accuracy < self.best_accuracy:
+            self.best_accuracy = accuracy
             torch.save(model.state_dict(), self.path)
 
 class Trainer:

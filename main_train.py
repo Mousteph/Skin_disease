@@ -29,6 +29,7 @@ if __name__ == '__main__':
                         help="Number of epochs to train the model. Default: 15")
     parser.add_argument("--modelname", type=str, default="model/model_mlbio.pth",
                         help="Name of the model to save. Default: model/model_mlbio.pth")
+    parser.add_argument("--fine_tune", action="store_true", help="If the model should be fine tuned")
     args = parser.parse_args()
    
     dataset_train = HAM10000.load_from_file(args.root[0], train=True, transform=train_transform)
@@ -41,9 +42,12 @@ if __name__ == '__main__':
     
     device = "cuda" if torch.cuda.is_available() else "cpu"
     
-    model = HAM10000_model(7).to(device)
+    model = HAM10000_model(7).to(device, fine_tune=args.fine_tune or False)
     loss_function = nn.CrossEntropyLoss()
-    optimizer = torch.optim.Adam(model.parameters())
+    if args.fine_tune:
+        optimizer = torch.optim.Adam(model.fc.parameters())
+    else:
+        optimizer = torch.optim.Adam(model.parameters())
     
     trainer = Trainer(model, optimizer, loss_function, device)
     trainer.training_process(train_data, test_data, args.epochs)
