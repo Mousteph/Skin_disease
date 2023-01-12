@@ -12,7 +12,7 @@ def HAM10000_model(output_dim: int, fine_tune=False) -> nn.Module:
         nn.Module: Model for the HAM10000 dataset.
     """
     
-    model = models.resnet34(weights=models.ResNet34_Weights.DEFAULT)
+    model = models.resnet18(weights=models.ResNet18_Weights.DEFAULT)
     
     if fine_tune:
         for param in model.parameters():

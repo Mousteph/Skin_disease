@@ -23,7 +23,7 @@ LESION_TYPE = {
 PRECISION = {
     "Faible": 50,
     "Moyenne": 200,
-    "Importante": 1000,
+    "Importante": 1500,
 }
 
 model = HAM10000_model(len(LESION_TYPE))

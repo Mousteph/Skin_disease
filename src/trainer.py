@@ -12,16 +12,23 @@ class SaveBestModel:
         self.path = path
         self.best_accuracy = best_accuracy
         
-    def __call__(self, model: torch.nn.Module, accuracy: float) -> None:
+    def __call__(self, model: torch.nn.Module, accuracy: float) -> bool:
         """Save the model if the loss is lower than the best loss.
         Args:
             model (torch.nn.Module): Model to save.
             accuracy (float): Accuracy of the model.
+            
+        Returns:
+            bool: True if the model is saved, False otherwise.
         """
 
-        if accuracy < self.best_accuracy:
+        if accuracy > self.best_accuracy:
             self.best_accuracy = accuracy
             torch.save(model.state_dict(), self.path)
+            
+            return True
+        
+        return False
 
 class Trainer:
     def __init__(self,
@@ -137,12 +144,13 @@ class Trainer:
             test_losses[e] = test_loss
             test_accuracies[e] = test_accuracy
                 
+            saved = ""
             if keep_best:
-                save_model(self.model, test_loss)
+                saved = "---> Saved" if save_model(self.model, test_accuracy) else ""
             
             print(f"Epoch {e + 1}/{epochs}, Train loss: {train_loss:.4f}, "
                     f"Train accuracy: {train_accuracy:.4f}, Test loss: {test_loss:.4f}, "
-                    f"Test accuracy: {test_accuracy:.4f}")
+                    f"Test accuracy: {test_accuracy:.4f} {saved}")
                 
         if keep_best:
             self.model.load_state_dict(torch.load(path_best_model))

@@ -10,6 +10,7 @@ from torch import nn
 
 train_transform = transforms.Compose(
     [
+        transforms.GaussianBlur(kernel_size=(5, 5)),
         transforms.RandomPerspective(),
         transforms.RandomRotation(180),
         transforms.ToTensor(), # Scale image to [0, 1]
@@ -48,7 +49,7 @@ if __name__ == '__main__':
     else:
         optimizer = torch.optim.Adam(model.parameters())
         
-    lr_scheduler = lr_scheduler.StepLR(optimizer, step_size=5, gamma=0.1)
+    lr_scheduler = lr_scheduler.StepLR(optimizer, step_size=4, gamma=0.1)
     
     trainer = Trainer(model, optimizer, loss_function, device, scheduler=lr_scheduler)
     trainer.train(train_data, test_data, args.epochs)

@@ -12,7 +12,7 @@ Les formes vertes indiquent les zones qui ont été utilisées pour expliquer la
 
 ### Training data et performance du modèle
 
-Pour atteindre cet objectif, nous avons entraîné notre modèle en utilisant le jeu de données HAM10000 avec 2122 exemples d'entraînement et 519 exemples de validation. Nous avons réentraîné le modèle ResNet34 sur 15 époques (duré d'entrainememt ~1h15) et conservé le modèle le plus performant. Nous avons obtenu une précision de 80% sur les donées d'entraînement et de 70% sur les donées de test.
+Pour atteindre cet objectif, nous avons entraîné notre modèle en utilisant le jeu de données HAM10000 avec 2140 exemples d'entraînement et 795 exemples de validation. Nous avons réentraîné le modèle ResNet18 sur 15 époques (duré d'entrainememt ~1h) et conservé le modèle le plus performant. Nous avons obtenu une précision de 81% sur les donées d'entraînement et de 73% sur les donées de test.
 
 Un modèle pré-entraîné est déjà disponible (et utilisé pour la classification), mais vous pouvez le ré-entraîner en utilisant la commande suivante :
 
