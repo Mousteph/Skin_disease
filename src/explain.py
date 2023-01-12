@@ -38,7 +38,7 @@ class ExplainResults:
                                                           num_samples=num_samples) # number of images that will be sent to classification function
 
             temp, mask = explanation.get_image_and_mask(explanation.top_labels[0],
-                                                        positive_only=True,
+                                                        positive_only=False,
                                                         num_features=5,
                                                         hide_rest=False)
 

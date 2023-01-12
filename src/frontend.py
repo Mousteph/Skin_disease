@@ -56,6 +56,6 @@ if image is not None and skin_diseases is not None and proba_skin_diseases is no
         st.write(f"""
         ### Rapport de classification :
         - Maladie de peau : **{skin_diseases}**
-        - Probabilité : {round(proba_skin_diseases, 3) * 100}%
-        Les marques jaunes indiquent les zones les plus importantes utilisées par le modèle pour la classification.
+        - Probabilité : {round(proba_skin_diseases, 3) * 100}% 
+        Les formes vertes indiquent les zones qui ont été utilisées pour expliquer la décision du modèle.
                 """)

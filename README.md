@@ -4,23 +4,24 @@ Bienvenue dans le projet de classification des maladies de la peau ! Le but de c
 
 ### Examples de classification
 
-<img src="images/mn_1.png" style="float:left; width:49%; margin-right:1%;">
-<img src="images/frontend.png" style="float:left; width:49%;">  
+Les formes vertes indiquent les zones qui ont été utilisées pour expliquer la décision du modèle.
+
+<img src="images/mn_1.png" style="float:left; width:45%; margin-right:1%;">
+<img src="images/frontend.png" style="float:left; width:45%;">  
 
 
 ### Training data et performance du modèle
 
 Pour atteindre cet objectif, nous avons entraîné notre modèle en utilisant le jeu de données HAM10000 avec 2122 exemples d'entraînement et 519 exemples de validation. Nous avons réentraîné le modèle ResNet34 sur 15 époques (duré d'entrainememt ~1h15) et conservé le modèle le plus performant. Nous avons obtenu une précision de 80% sur les donées d'entraînement et de 70% sur les donées de test.
 
-Un modèle pré-entraîné est déjà disponible (et utilisé pour la classification), mais vous pouvez réentraîner le modèle en utilisant la commande suivante :
+Un modèle pré-entraîné est déjà disponible (et utilisé pour la classification), mais vous pouvez le ré-entraîner en utilisant la commande suivante :
 
 ```bash
 python main_train.py [-h] [--epochs EPOCHS] [--modelname MODELNAME] root
 ```
 
-Les arguments sont les suivants :
 - --epochs EPOCHS : Nombre d'époques d'apprentissage (par défaut : 15)
-- modelname MODELNAME : Nom du modèle à sauvegarder (par défaut : 'model/model_mlbio.pth')
+- --modelname MODELNAME : Nom du modèle à sauvegarder (par défaut : 'model/model_mlbio.pth')
 - root : chemin d'accès au répertoire contenant les images d'entraînement. Ce répertoire doit contenir un fichier nommé *HAM10000_metadata.csv* avec les métadonnées et deux sous-répertoires, *HAM10000_images_train* et *HAM10000_images_test*, contenant respectivement les images d'entraînement et de test.", example si-dessous :
 
 ```bash
@@ -38,7 +39,7 @@ root/
 
 ### Serveur
 
-Ce projet comprend un serveur qui permet aux utilisateurs, en envoyant leurs images, de classifier les maladies de peau en envoyant. Le serveur utilise le modèle entraîné pour classer les images et renvoie à l'utilisateur la classe prédite, sa probabilité et une explication de la décision du modèle. Le serveur peut être lancé à l'aide de la commande : 
+Ce projet comprend un serveur qui permet aux utilisateurs, en envoyant leurs images, de classifier les maladies de peau. Le serveur utilise le modèle entraîné pour classer les images et renvoie à l'utilisateur la classe prédite, sa probabilité et une explication de la décision du modèle. Le serveur peut être lancé à l'aide de la commande : 
 
 ```bash
 docker-compose up -d.
@@ -64,9 +65,8 @@ Les utilisateurs peuvent également classifier les images en utilisant la comman
 python client.py [-h] [--explain] [--precision PRECISION] image
 ```
 
-Les arguments sont les suivants :
 - --explain : Fournit une explication détaillée de la prédiction du modèle.
-- --precision PRECISION : Définit la précision de la probabilité dans la sortie. Les valeurs valides sont *Faible*, *Moyenne* et *Importante*. Une précision plus élevée donnera des résultats plus précis, mais augmentera également le temps d'exécution.
+- --precision PRECISION : Définit la précision de l'explication. Les valeurs valides sont *Faible*, *Moyenne* et *Importante*. Une précision plus élevée donnera des résultats plus précis, mais augmentera également le temps d'exécution.
 - image : Le chemin vers l'image ou les images à classifier.
 
 Par exemple, pour classer une image *test.jpg* avec une explication et une précision *Importante*, vous pouvez utiliser la commande suivante :
@@ -77,7 +77,7 @@ python client.py --explain --precision Importante test.jpg
 
 ### API
 
-Les utilisateurs peuvent également classifier des images à l'aide de l'API en effectuant une requête POST vers l'endpoint ""http://127.0.0.1:8089/predict" avec l'image jointe. Pour faire une demande à l'API, vous devez envoyer un objet JSON avec les champs suivants :
+Les utilisateurs peuvent également classifier des images à l'aide de l'API en effectuant une requête POST vers l'endpoint http://127.0.0.1:8089/predict avec l'image jointe. Pour faire une demande à l'API, vous devez envoyer un objet JSON avec les champs suivants :
 
 | Champ | Description | Obligatoire |
 | ----- | ----------- | ----------- |
@@ -118,9 +118,9 @@ En cas d'échec, le serveur renvoie un objet JSON au format suivant :
 
 ### Informations
 - Le temps d'éxecution d'une image avec une precision :
-  - Faible : ~15s
-  - Moyenne : ~1min
-  - Importante : ~5min
+  - Faible : ~15 secondes
+  - Moyenne : ~1 minute
+  - Importante : ~ 5 minutes
 
 ## Crédits
 
