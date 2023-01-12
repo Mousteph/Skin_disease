@@ -22,7 +22,7 @@ LESION_TYPE = {
 
 PRECISION = {
     "Faible": 50,
-    "Moyenne": 200,
+    "Moyenne": 400,
     "Importante": 1500,
 }
 

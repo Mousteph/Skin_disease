@@ -59,14 +59,14 @@ L'interface graphique (http://localhost:8501/) permet aux utilisateurs de classi
 
 ### Command-line interface
 
-Les utilisateurs peuvent également classifier les images en utilisant la command-line interface (CLI) en exécutant *client.py*. La CLI s'utilise de la façon suivante : 
+Les utilisateurs peuvent classifier les images en utilisant la command-line interface (CLI) en exécutant *client.py*. La CLI s'utilise de la façon suivante : 
 
 ```bash
 python client.py [-h] [--explain] [--precision PRECISION] image
 ```
 
 - --explain : Fournit une explication détaillée de la prédiction du modèle.
-- --precision PRECISION : Définit la précision de l'explication. Les valeurs valides sont *Faible*, *Moyenne* et *Importante*. Une précision plus élevée donnera des résultats plus précis, mais augmentera également le temps d'exécution.
+- --precision PRECISION : Définit la précision de l'explication. Les valeurs valides sont *Faible*, *Moyenne* et *Importante*. Une précision plus élevée donnera des résultats plus précis, mais augmentera le temps d'exécution.
 - image : Le chemin vers l'image ou les images à classifier.
 
 Par exemple, pour classer une image *test.jpg* avec une explication et une précision *Importante*, vous pouvez utiliser la commande suivante :
@@ -77,7 +77,7 @@ python client.py --explain --precision Importante test.jpg
 
 ### API
 
-Les utilisateurs peuvent également classifier des images à l'aide de l'API en effectuant une requête POST vers l'endpoint http://127.0.0.1:8089/predict avec l'image jointe. Pour faire une demande à l'API, vous devez envoyer un objet JSON avec les champs suivants :
+Les utilisateurs peuvent aussi classifier des images à l'aide de l'API en effectuant une requête POST vers l'endpoint http://127.0.0.1:8089/predict avec l'image jointe. Pour faire une demande à l'API, vous devez envoyer un objet JSON avec les champs suivants :
 
 | Champ | Description | Obligatoire |
 | ----- | ----------- | ----------- |
@@ -118,9 +118,9 @@ En cas d'échec, le serveur renvoie un objet JSON au format suivant :
 
 ### Informations
 - Le temps d'éxecution d'une image avec une precision :
-  - Faible : ~15 secondes
-  - Moyenne : ~1 minute
-  - Importante : ~ 5 minutes
+  - Faible : ~10 secondes
+  - Moyenne : ~1.15 minute
+  - Importante : ~ 4.30 minutes
 
 ## Crédits
 

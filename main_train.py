@@ -31,7 +31,6 @@ if __name__ == '__main__':
     parser.add_argument("--fine_tune", action="store_true", help="If the model should be fine tuned")
     args = parser.parse_args()
     
-   
     dataset_train = HAM10000.load_from_file(args.root[0], train=True, transform=train_transform)
     dataset_test = HAM10000.load_from_file(args.root[0], train=False, transform=test_transform)
     
