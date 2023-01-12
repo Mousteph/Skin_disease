@@ -28,17 +28,20 @@ class Trainer:
                  model: torch.nn.Module,
                  optimizer: torch.optim.Optimizer,
                  loss: torch.nn.Module,
-                 device: str) -> None:
+                 device: str,
+                 scheduler: torch.optim.lr_scheduler.StepLR = None):
         """Initialize the trainer.
         Args:
             model (torch.nn.Module): Model to train.
             optimizer (torch.optim.Optimizer): Optimizer to use.
             loss (torch.nn.Module): Loss function to use.
             device (str): Device to use (cuda or cpu).
+            scheduler (torch.optim.lr_scheduler.StepLR): Scheduler to use. Defaults to None.
         """
         self.model = model.to(device)
         self.optimizer = optimizer
         self.loss = loss
+        self.scheduler = scheduler
         self.device = device
 
     def _train(self, dataloader: torch.utils.data.DataLoader) -> None:
@@ -61,8 +64,11 @@ class Trainer:
             self.optimizer.zero_grad()
             loss.backward()
             self.optimizer.step()
+            
+        if self.scheduler is not None:
+            self.scheduler.step()
 
-    def _test(self, dataloader: torch.utils.data.DataLoader) -> Tuple[float, float]:
+    def evaluate(self, dataloader: torch.utils.data.DataLoader) -> Tuple[float, float]:
         """Compute the loss and the accurary for a given dataloader.
         Args:
             dataloader (torch.utils.data.DataLoader): Dataloader to use.
@@ -94,13 +100,13 @@ class Trainer:
         torch.save(self.model.to('cpu').state_dict(), path)
         print(f"Model saved to {path}.")
    
-    def training_process(self,
-                         train_loader: torch.utils.data.DataLoader,
-                         test_loader: torch.utils.data.DataLoader,
-                         epochs: int = 10,
-                         keep_best: bool = False,
-                         path_best_model: str = "./temp/best_model.pth"
-                         ) -> Tuple[list, list, list, list]:
+    def train(self,
+              train_loader: torch.utils.data.DataLoader,
+              test_loader: torch.utils.data.DataLoader,
+              epochs: int = 10,
+              keep_best: bool = False,
+              path_best_model: str = "best_model.pth"
+              ) -> Tuple[list, list, list, list]:
         """Train the model for a given number of epochs.
         
         Args:
@@ -123,8 +129,8 @@ class Trainer:
         
         for e in range(epochs):
             self._train(train_loader)
-            train_loss, train_accuracy = self._test(train_loader)
-            test_loss, test_accuracy = self._test(test_loader)
+            train_loss, train_accuracy = self.evaluate(train_loader)
+            test_loss, test_accuracy = self.evaluate(test_loader)
             
             train_losses[e] = train_loss
             train_accuracies[e] = train_accuracy
