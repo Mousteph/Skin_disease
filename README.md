@@ -6,8 +6,8 @@ Bienvenue dans le projet de classification des maladies de la peau ! Le but de c
 
 Les formes vertes indiquent les zones qui ont été utilisées pour expliquer la décision du modèle.
 
-<img src="images/mn_1.png" style="float:left; width:45%; margin-right:1%;">
-<img src="images/frontend.png" style="float:left; width:45%;">  
+![alt text](images/frontend.png "Zones utilisées pour classifier l'image")
+![alt text](images/mn_1.png "Zones utilisées pour classifier l'image")
 
 
 ### Training data et performance du modèle
