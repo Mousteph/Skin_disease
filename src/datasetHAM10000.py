@@ -3,7 +3,33 @@ import torch
 from PIL import Image
 import pandas as pd
 from torchvision.transforms import Compose
-from .utils_load_images import load_images
+from os.path import isfile, join
+from os import listdir
+
+def load_images(path_meta: str, path_images:str , type_dict: dict, cardinal_dict: dict) -> pd.DataFrame:
+    """Load the images.
+
+    Args:
+        path_meta (str): Path to the metadata.
+        path_images (str): Path to the images.
+        type_dict (dict): Dictionary with the type of the disease.
+        cardinal_dict (dict): Dictionary with the cardinality of the disease.
+
+    Returns:
+        pd.DataFrame: DataFrame with the metadata of the images.
+    """
+    
+    meta = pd.read_csv(path_meta)[["image_id", "dx"]]
+    images = [f for f in listdir(path_images) if isfile(join(path_images, f))]
+    
+    meta["image_id"] = meta['image_id'].map(lambda x: x + ".jpg")
+    meta = meta[meta['image_id'].isin(images)]
+
+    meta['image_id'] = meta['image_id'].map(lambda x: path_images + x)
+    meta['type'] = meta['dx'].map(lambda x: type_dict[x])
+    meta['label'] = meta['type'].map(lambda x: cardinal_dict[x])
+
+    return meta.drop(columns=['dx'])
 
 
 class HAM10000(Dataset):

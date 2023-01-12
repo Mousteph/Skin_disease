@@ -2,7 +2,7 @@ import base64
 import sys
 import matplotlib.pyplot as plt
 import numpy as np
-from src.sender import send_image
+from src import send_image
 import argparse
 
 headers = {'Content-type': 'application/json', 'Accept': 'text/plain'}

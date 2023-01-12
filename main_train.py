@@ -1,8 +1,6 @@
 import argparse
 
-from src.datasetHAM10000 import HAM10000
-from src.model import HAM10000_model
-from src.trainer import Trainer
+from src import HAM10000, HAM10000_model, Trainer
 
 from torchvision import transforms
 from torch.utils.data import DataLoader
@@ -31,6 +29,8 @@ if __name__ == '__main__':
                         help="Name of the model to save. Default: model/model_mlbio.pth")
     parser.add_argument("--fine_tune", action="store_true", help="If the model should be fine tuned")
     args = parser.parse_args()
+    
+    exit(0)
    
     dataset_train = HAM10000.load_from_file(args.root[0], train=True, transform=train_transform)
     dataset_test = HAM10000.load_from_file(args.root[0], train=False, transform=test_transform)
