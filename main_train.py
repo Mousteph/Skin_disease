@@ -40,10 +40,11 @@ if __name__ == '__main__':
     test_data = DataLoader(dataset_test, batch_size=batch_size, shuffle=True)
  
     device = "cuda" if torch.cuda.is_available() else "cpu"
-    
-    model = HAM10000_model(7).to(device, fine_tune=args.fine_tune or False)
+   
+    fine_tune = args.fine_tune or False 
+    model = HAM10000_model(7, fine_tune=fine_tune).to(device)
     loss_function = nn.CrossEntropyLoss()
-    if args.fine_tune:
+    if fine_tune:
         optimizer = torch.optim.Adam(model.fc.parameters())
     else:
         optimizer = torch.optim.Adam(model.parameters())
@@ -51,6 +52,6 @@ if __name__ == '__main__':
     lr_scheduler = lr_scheduler.StepLR(optimizer, step_size=4, gamma=0.1)
     
     trainer = Trainer(model, optimizer, loss_function, device, scheduler=lr_scheduler)
-    trainer.train(train_data, test_data, args.epochs)
+    trainer.train(train_data, test_data, args.epochs, keep_best=True)
     
     trainer.save(args.modelname)
