@@ -30,7 +30,6 @@ if __name__ == '__main__':
     parser.add_argument("--fine_tune", action="store_true", help="If the model should be fine tuned")
     args = parser.parse_args()
     
-    exit(0)
    
     dataset_train = HAM10000.load_from_file(args.root[0], train=True, transform=train_transform)
     dataset_test = HAM10000.load_from_file(args.root[0], train=False, transform=test_transform)
@@ -39,7 +38,7 @@ if __name__ == '__main__':
     
     train_data = DataLoader(dataset_train, batch_size=batch_size, shuffle=True)
     test_data = DataLoader(dataset_test, batch_size=batch_size, shuffle=True)
-    
+ 
     device = "cuda" if torch.cuda.is_available() else "cpu"
     
     model = HAM10000_model(7).to(device, fine_tune=args.fine_tune or False)
