@@ -12,16 +12,18 @@ Les formes vertes indiquent les zones qui ont été utilisées pour expliquer la
 
 ### Training data et performance du modèle
 
-Pour atteindre cet objectif, nous avons entraîné notre modèle en utilisant le jeu de données HAM10000 avec 2140 exemples d'entraînement et 795 exemples de validation. Nous avons réentraîné le modèle ResNet18 sur 15 époques (duré d'entrainememt ~1h) et conservé le modèle le plus performant. Nous avons obtenu une précision de 81% sur les donées d'entraînement et de 73% sur les donées de test.
+Pour atteindre cet objectif, nous avons entraîné notre modèle en utilisant le jeu de données HAM10000 avec 2140 exemples d'entraînement et 795 exemples de validation. Nous avons réentraîné le modèle ResNet34 sur 15 époques (duré d'entrainememt ~1h15) et conservé le modèle le plus performant. Nous avons obtenu une précision de 81% sur les donées d'entraînement et de 73% sur les donées de test.
 
 Un modèle pré-entraîné est déjà disponible (et utilisé pour la classification), mais vous pouvez le ré-entraîner en utilisant la commande suivante :
 
 ```bash
-python main_train.py [-h] [--epochs EPOCHS] [--modelname MODELNAME] root
+python main_train.py [-h] [--epochs EPOCHS] [--modelname MODELNAME] [--fine_tune] [--type TYPE] root
 ```
 
 - --epochs EPOCHS : Nombre d'époques d'apprentissage (par défaut : 15)
-- --modelname MODELNAME : Nom du modèle à sauvegarder (par défaut : 'model/model_mlbio.pth')
+- --modelname MODELNAME : Nom du modèle à sauvegarder (par défaut : 'model/model_resnet34.pth')
+- --fine_tune : Ré-entraîne seulement le dernier layer du modèle (par défaut : False)
+- --type : Type de modèle à entrainer ('resnet18' ou 'resnet34') (par défaut : 'resnet34')
 - root : chemin d'accès au répertoire contenant les images d'entraînement. Ce répertoire doit contenir un fichier nommé *HAM10000_metadata.csv* avec les métadonnées et deux sous-répertoires, *HAM10000_images_train* et *HAM10000_images_test*, contenant respectivement les images d'entraînement et de test.", example si-dessous :
 
 ```bash
@@ -44,6 +46,8 @@ Ce projet comprend un serveur qui permet aux utilisateurs, en envoyant leurs ima
 ```bash
 docker-compose up -d.
 ```
+
+Le serveur peut utiliser deux types de modèle : *resnet18* ou *resnet34*. Le modèle utilisé par défaut est *resnet34*, mais vous pouvez le changer en modifiant la variable d'environnement *MODEL* dans le fichier *docker-compose.yml*.
 
 ### Interface graphique
 

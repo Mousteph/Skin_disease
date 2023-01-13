@@ -7,6 +7,9 @@ import io
 import torch
 from torchvision import transforms
 from PIL import Image
+import os
+
+MODEL = os.environ.get("MODEL", "resnet34")
 
 app = Flask(__name__)
 
@@ -22,12 +25,12 @@ LESION_TYPE = {
 
 PRECISION = {
     "Faible": 50,
-    "Moyenne": 400,
-    "Importante": 1500,
+    "Moyenne": 200,
+    "Importante": 1000,
 }
 
-model = HAM10000_model(len(LESION_TYPE))
-model.load_state_dict(torch.load("/code/model/model_mlbio.pth"))
+model = HAM10000_model(len(LESION_TYPE), model_type=MODEL)
+model.load_state_dict(torch.load(f"/code/model/model_{MODEL}.pth"))
 
 transform = transforms.Compose([
             transforms.ToTensor(), # Scale image to [0, 1]

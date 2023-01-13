@@ -26,9 +26,10 @@ if __name__ == '__main__':
     parser.add_argument("root", nargs=1, help='Root to the images')
     parser.add_argument("--epochs", type=int, default=15,
                         help="Number of epochs to train the model. Default: 15")
-    parser.add_argument("--modelname", type=str, default="model/model_mlbio.pth",
-                        help="Name of the model to save. Default: model/model_mlbio.pth")
+    parser.add_argument("--modelname", type=str, default="model/model_resnet34.pth",
+                        help="Name of the model to save. Default: model/model_resnet34.pth")
     parser.add_argument("--fine_tune", action="store_true", help="If the model should be fine tuned")
+    parser.add_argument("--type", type=str, default="resnet34", help="Type of model to train (resnet18 or resnet34). Default: resnet34")
     args = parser.parse_args()
     
     dataset_train = HAM10000.load_from_file(args.root[0], train=True, transform=train_transform)
@@ -42,7 +43,7 @@ if __name__ == '__main__':
     device = "cuda" if torch.cuda.is_available() else "cpu"
    
     fine_tune = args.fine_tune or False 
-    model = HAM10000_model(7, fine_tune=fine_tune).to(device)
+    model = HAM10000_model(7, fine_tune=fine_tune, model_type=args.type).to(device)
     loss_function = nn.CrossEntropyLoss()
     if fine_tune:
         optimizer = torch.optim.Adam(model.fc.parameters())
