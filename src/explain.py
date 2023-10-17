@@ -57,6 +57,7 @@ class ExplainResults:
         Returns:
             Tuple[tuple, np.array]: (The prediction, The probability of the prediction), (The explication if explain is True, None if explain is False).
         """
+
         probs = self.batch_prediction([image])
         val = probs.argmax()
         lesion = (self.lesion_type.get(val), probs[0][val])

@@ -24,9 +24,9 @@ LESION_TYPE = {
 }
 
 PRECISION = {
-    "Faible": 50,
-    "Moyenne": 200,
-    "Importante": 1000,
+    "Low": 50,
+    "Medium": 200,
+    "High": 1000,
 }
 
 model = HAM10000_model(len(LESION_TYPE), model_type=MODEL)
@@ -62,7 +62,7 @@ def prediction():
     if type(should_explain) is not bool:
         return return_error("Invalid type for explain: Should be a boolean")
         
-    precision = request.json['precision'] if 'precision' in request.json else "Moyenne"
+    precision = request.json['precision'] if 'precision' in request.json else "Medium"
     precision = PRECISION.get(precision, 10)
     
     try:

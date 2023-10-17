@@ -79,6 +79,9 @@ class Trainer:
         """Compute the loss and the accurary for a given dataloader.
         Args:
             dataloader (torch.utils.data.DataLoader): Dataloader to use.
+
+        Returns:
+            Tuple[float, float]: Loss, accuracy.
         """
         
         size = len(dataloader.dataset)

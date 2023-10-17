@@ -1,30 +1,31 @@
-# Projet MLBIO : Classification des maladies de la peau
+# MLBIO Project: Skin Disease Classification
 
-Bienvenue dans le projet de classification des maladies de la peau ! Le but de ce projet est de classifier différentes maladies de la peau en utilisant le jeu de données HAM10000 et de fournir une explication sur la décision prise par le modèle en utilisant la bibliothèque LIME.
+Welcome to the Skin Disease Classification project! The goal of this project is to classify different skin diseases using the HAM10000 dataset and provide an explanation for the model's decision using the LIME library.
 
-### Examples de classification
+### Classification Examples
 
-Les formes vertes indiquent les zones qui ont été utilisées pour expliquer la décision du modèle.
+The green shapes indicate the areas used to explain the model's decision.
 
-![alt text](images/frontend.png "Zones utilisées pour classifier l'image")
-![alt text](images/mn_1.png "Zones utilisées pour classifier l'image")
+![alt text](images/frontend.png "Areas used to classify the image")
+![alt text](images/mn_1.png "Areas used to classify the image")
 
+### Training Data and Model Performance
 
-### Training data et performance du modèle
+To achieve this goal, we trained our model using the HAM10000 dataset with 2140 training examples and 795 validation examples. We retrained the ResNet34 model for 15 epochs (training duration ~1h15) and retained the best-performing model. We achieved an accuracy of 81% on the training data and 73% on the test data.
 
-Pour atteindre cet objectif, nous avons entraîné notre modèle en utilisant le jeu de données HAM10000 avec 2140 exemples d'entraînement et 795 exemples de validation. Nous avons réentraîné le modèle ResNet34 sur 15 époques (duré d'entrainememt ~1h15) et conservé le modèle le plus performant. Nous avons obtenu une précision de 81% sur les donées d'entraînement et de 73% sur les donées de test.
-
-Un modèle pré-entraîné est déjà disponible (et utilisé pour la classification), mais vous pouvez le ré-entraîner en utilisant la commande suivante :
+A pre-trained model is already available (and used for classification), but you can retrain it using the following command:
 
 ```bash
 python main_train.py [-h] [--epochs EPOCHS] [--modelname MODELNAME] [--fine_tune] [--type TYPE] root
 ```
 
-- --epochs EPOCHS : Nombre d'époques d'apprentissage (par défaut : 15)
-- --modelname MODELNAME : Nom du modèle à sauvegarder (par défaut : 'model/model_resnet34.pth')
-- --fine_tune : Ré-entraîne seulement le dernier layer du modèle (par défaut : False)
-- --type : Type de modèle à entrainer ('resnet18' ou 'resnet34') (par défaut : 'resnet34')
-- root : chemin d'accès au répertoire contenant les images d'entraînement. Ce répertoire doit contenir un fichier nommé *HAM10000_metadata.csv* avec les métadonnées et deux sous-répertoires, *HAM10000_images_train* et *HAM10000_images_test*, contenant respectivement les images d'entraînement et de test.", example si-dessous :
+- --epochs EPOCHS: Number of training epochs (default: 15).
+- --modelname MODELNAME: Name of the model to be saved (default: 'model/model_resnet34.pth').
+- --fine_tune: Retrain only the last layer of the model (default: False).
+- --type: Type of model to train ('resnet18' or 'resnet34') (default: 'resnet34').
+- root: Path to the directory containing the training images. This directory must contain a file named *HAM10000_metadata.csv* with metadata and two subdirectories, *HAM10000_images_train* and *HAM10000_images_test*, containing training and test images, respectively.
+
+Example directory structure:
 
 ```bash
 root/
@@ -39,68 +40,67 @@ root/
 |    |--- ...
 ```
 
-### Serveur
+### Server
 
-Ce projet comprend un serveur qui permet aux utilisateurs, en envoyant leurs images, de classifier les maladies de peau. Le serveur utilise le modèle entraîné pour classer les images et renvoie à l'utilisateur la classe prédite, sa probabilité et une explication de la décision du modèle. Le serveur peut être lancé à l'aide de la commande : 
+This project includes a server that allows users to classify skin diseases by sending their images. The server uses the trained model to classify the images and returns the predicted class, probability, and an explanation of the model's decision to the user. The server can be launched using the following command:
 
 ```bash
 docker-compose up -d.
 ```
 
-Le serveur peut utiliser deux types de modèle : *resnet18* ou *resnet34*. Le modèle utilisé par défaut est *resnet34*, mais vous pouvez le changer en modifiant la variable d'environnement *MODEL* dans le fichier *docker-compose.yml*.
+The server can use two types of models: *resnet18* or *resnet34*. The default model is *resnet34*, but you can change it by modifying the *MODEL* environment variable in the *docker-compose.yml* file.
 
-### Interface graphique
+### Graphical User Interface
 
-En plus du serveur, ce projet comprend également une interface graphique construite avec Streamlit, qui peut être lancée avec la commande : 
+In addition to the server, this project also includes a graphical interface built with Streamlit, which can be launched using the following command:
 
 ```bash
 streamlit run src/frontend.py
 ```
 
-L'interface graphique (http://localhost:8501/) permet aux utilisateurs de classifier des images en les téléchargeant via un navigateur web et de visualiser l'explication de la décision du modèle.
+The graphical interface (http://localhost:8501/) allows users to classify images by uploading them through a web browser and view the explanation of the model's decision.
 
-![alt text](images/frontend.png "Interface graphique")
+![alt text](images/frontend.png "Graphical Interface")
 
-### Command-line interface
+### Command-line Interface
 
-Les utilisateurs peuvent classifier les images en utilisant la command-line interface (CLI) en exécutant *client.py*. La CLI s'utilise de la façon suivante : 
+Users can classify images using the command-line interface (CLI) by running *client.py*. The CLI is used as follows:
 
 ```bash
 python client.py [-h] [--explain] [--precision PRECISION] image
 ```
 
-- --explain : Fournit une explication détaillée de la prédiction du modèle.
-- --precision PRECISION : Définit la précision de l'explication. Les valeurs valides sont *Faible*, *Moyenne* et *Importante*. Une précision plus élevée donnera des résultats plus précis, mais augmentera le temps d'exécution.
-- image : Le chemin vers l'image ou les images à classifier.
+- --explain: Provides a detailed explanation of the model's prediction.
+- --precision PRECISION: Sets the explanation precision. Valid values are *Low*, *Medium*, and *High*. Higher precision will provide more accurate results but increase execution time.
+- image: The path to the image or images to classify.
 
-Par exemple, pour classer une image *test.jpg* avec une explication et une précision *Importante*, vous pouvez utiliser la commande suivante :
+For example, to classify an image *test.jpg* with an explanation and high precision, you can use the following command:
 
 ```bash
-python client.py --explain --precision Importante test.jpg
+python client.py --explain --precision High test.jpg
 ```
 
 ### API
 
-Les utilisateurs peuvent aussi classifier des images à l'aide de l'API en effectuant une requête POST vers l'endpoint http://127.0.0.1:8089/predict avec l'image jointe. Pour faire une demande à l'API, vous devez envoyer un objet JSON avec les champs suivants :
+Users can also classify images using the API by making a POST request to the endpoint http://127.0.0.1:8089/predict with the attached image. To make a request to the API, you must send a JSON object with the following fields:
 
-| Champ | Description | Obligatoire |
+| Field | Description | Mandatory |
 | ----- | ----------- | ----------- |
-| image | L'image à classifier, encodée en base64. | Oui |
-| explain | Si vous souhaitez inclure une explication dans la réponse. (bool) | Non |
-| precision | La précision souhaitée. Les valeurs valides sont *Faible*, *Moyenne* et *Importante*. | Non |
+| image | The image to classify, encoded in base64. | Yes |
+| explain | If you want to include an explanation in the response. (bool) | No |
+| precision | The desired precision. Valid values are *Low*, *Medium*, and *High*. | No |
 
-Voici un exemple de demande à l'API à l'aide de la commande curl :
+Here is an example of an API request using the curl command:
 
 ```bash
 curl -X POST -H "Content-Type: application/json" -d '{
   "image": "base64_encoded_image_data",
   "explain": true,
-  "precision": "high"
+  "precision": "High"
 }' http://127.0.0.1:8089/predict
 ```
 
-
-En cas de réussite, le serveur renvoie un objet JSON au format suivant :
+In case of success, the server returns a JSON object in the following format:
 
 ```json
 {
@@ -111,7 +111,7 @@ En cas de réussite, le serveur renvoie un objet JSON au format suivant :
 }
 ```
 
-En cas d'échec, le serveur renvoie un objet JSON au format suivant :
+In case of failure, the server returns a JSON object in the following format:
 
 ```json
 {
@@ -120,16 +120,16 @@ En cas d'échec, le serveur renvoie un objet JSON au format suivant :
 }
 ```
 
-### Informations
-- Le temps d'éxecution d'une image avec une precision :
-  - Faible : ~10 secondes
-  - Moyenne : ~1.15 minute
-  - Importante : ~ 4.30 minutes
+### Information
+- Execution time for an image with precision:
+  - Low: ~10 seconds
+  - Medium: ~1.15 minutes
+  - High: ~4.30 minutes
 
-## Crédits
+## Credits
 
-- [torchvision](https://pytorch.org/vision/stable/index.html) : Pour utiliser le modèle ResNet34 pré-entraîné.
-- [Kaggle](https://www.kaggle.com/kmader/skin-cancer-mnist-ham10000) : Pour le jeu de données HAM10000.
-- [LIME](https://github.com/marcotcr/lime) : Pour l'explication des prédictions.
-- [Streamlit](https://www.streamlit.io/) : Pour l'interface graphique.
-- [Flask](https://flask.palletsprojects.com/en/2.2.x/) : Pour le serveur.
+- [torchvision](https://pytorch.org/vision/stable/index.html): For using the pre-trained ResNet34 model.
+- [Kaggle](https://www.kaggle.com/kmader/skin-cancer-mnist-ham10000): For the HAM10000 dataset.
+- [LIME](https://github.com/marcotcr/lime): For prediction explanations.
+- [Streamlit](https://www.streamlit.io/): For the graphical interface.
+- [Flask](https://flask.palletsprojects.com/en/2.2.x/): For the server.

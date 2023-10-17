@@ -37,7 +37,7 @@ def get_prediction(img, url, explain, precision):
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
     parser.add_argument("--explain", action="store_true", help="If the server should explain the prediction")
-    parser.add_argument("--precision", default="Moyenne", help="Precision of the explanation (Faible, Moyenne, Importante)")
+    parser.add_argument("--precision", default="Medium", help="Precision of the explanation (Low, Medium, High)")
     parser.add_argument("image", nargs=1, help='path to the image')
     args = parser.parse_args()
 

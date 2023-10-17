@@ -16,7 +16,7 @@ image_pred = None
 should_explain = st.checkbox("Explication", value=False)
 
 type_explain = st.selectbox("Précision de l'explication (une précision importante augmente le temps d'éxecution).",
-                            ["Faible", "Moyenne", "Importante"],
+                            ["Low", "Medium", "High"],
                             index=2)
                             
 skin_diseases = None
