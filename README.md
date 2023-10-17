@@ -1,3 +1,5 @@
+Pour la documentation en français, veuillez consulter le fichier [README_fr.md](README_fr.md)
+
 # MLBIO Project: Skin Disease Classification
 
 Welcome to the Skin Disease Classification project! The goal of this project is to classify different skin diseases using the HAM10000 dataset and provide an explanation for the model's decision using the LIME library.
@@ -55,7 +57,7 @@ The server can use two types of models: *resnet18* or *resnet34*. The default mo
 In addition to the server, this project also includes a graphical interface built with Streamlit, which can be launched using the following command:
 
 ```bash
-streamlit run src/frontend.py
+streamlit run src/frontend_en.py
 ```
 
 The graphical interface (http://localhost:8501/) allows users to classify images by uploading them through a web browser and view the explanation of the model's decision.

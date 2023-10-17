@@ -24,8 +24,8 @@ proba_skin_diseases = None
 
 st.write("##")
 
-if st.button("Prediction") and image is not None:
-    with st.spinner('Prediction in progress...'):
+if st.button("Prédiction") and image is not None:
+    with st.spinner('Prédiction en cours...'):
         img = base64.b64encode(image.read()).decode("utf8")
         data = send_image(img, "http://127.0.0.1:8089/predict", should_explain, type_explain)
         

@@ -81,6 +81,7 @@ class HAM10000(Dataset):
         Returns:
             Dataset: The HAM10000 dataset.
         """
+
         path_images = "/HAM10000_images_train/" if train else "/HAM10000_images_test/"
         path_metadata = "/HAM10000_metadata.csv"
         
