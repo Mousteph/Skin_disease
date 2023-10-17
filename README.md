@@ -8,8 +8,8 @@ Welcome to the Skin Disease Classification project! The goal of this project is 
 
 The green shapes indicate the areas used to explain the model's decision.
 
-![alt text](images/frontend.png "Areas used to classify the image")
-![alt text](images/mn_1.png "Areas used to classify the image")
+![alt text](images/frontend_en.png "Areas used to classify the image")
+![alt text](images/mn_1_en.png "Areas used to classify the image")
 
 ### Training Data and Model Performance
 
@@ -62,7 +62,7 @@ streamlit run src/frontend_en.py
 
 The graphical interface (http://localhost:8501/) allows users to classify images by uploading them through a web browser and view the explanation of the model's decision.
 
-![alt text](images/frontend.png "Graphical Interface")
+![alt text](images/frontend_en.png "Graphical Interface")
 
 ### Command-line Interface
 
